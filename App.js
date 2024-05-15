@@ -8,17 +8,9 @@ import QuizStart from './Screens/QuizStart';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeStackScreen from './Screens/HomeStackScreen';
+import Register from './Screens/Register';
 
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCVpZ-gNRSlCk_MWtwZJTJvCuF8N2D-vsA",
-  authDomain: "quiz-app-9fc72.firebaseapp.com",
-  projectId: "quiz-app-9fc72",
-  storageBucket: "quiz-app-9fc72.appspot.com",
-  messagingSenderId: "140614847703",
-  appId: "1:140614847703:web:4014ab525e235bd113b492",
-  measurementId: "G-1S5FJCT5R9"
-};
 
 const HomeStack = createNativeStackNavigator();
 
@@ -42,6 +34,7 @@ export default function App() {
       
       <NavigationContainer style = {styles.container}>
            <HomeStack.Navigator>
+           <HomeStack.Screen name="Register" component={Register} options={{headerShown: false}}/>
             <HomeStack.Screen name="HomeStack" component={HomeStackScreen} options={{headerShown: false}}/>
             <HomeStack.Screen name="QuizStart" component={QuizStart} options={{headerShown: false}}/>
           </HomeStack.Navigator>
