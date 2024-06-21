@@ -1,9 +1,10 @@
 import { ActivityIndicator, Dimensions, Image, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { signup } from "../services/auth";
+import { AuthContext, AuthProvider } from "../services/context";
 const { width, height } = Dimensions.get("window");
 const aspectRatio = 500/725;
 import { useNavigation } from "@react-navigation/native";
@@ -12,14 +13,19 @@ export default function Register() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [passwordVisible, setPasswordVisibility] = useState(false);
-    const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
 
+    //const {userCtx, setUserCtx} = useContext(AuthContext);
+
     const handleFormSubmit = async () => {
+        
         try {
             setLoading(true);
             const user = await signup(email, password);
+            //setUserCtx(userCtx);
+            setEmail("");
+            setPassword("");
             console.log(user);
             navigation.navigate("HomeStack");
         } catch(err) {
@@ -37,14 +43,20 @@ export default function Register() {
                 source={require("../assets/Icons/login-vector.jpg")}
                 style = {styles.registerVector}
             />
-            <Text style = {styles.registerLogo}>QuizWorld</Text>
+            <View style = {styles.logoContainer}>
+                <Image 
+                    source = {require("../assets/Icons/logo_blue.png")}
+                    style = {styles.logoImg}
+                />
+                <Text style = {styles.registerLogo}>QuizWorld</Text>
+            </View>
             <View>
                 <TextInput 
                     style = {styles.registerInputs}
                     placeholder="Email"
                     onChangeText={setEmail}
                     value={email}
-                    placeholderTextColor={"rgba(255, 47, 116, 0.4)"}
+                    placeholderTextColor={"rgba(83, 88, 218, 0.4)"}
                 />
                 <View style = {styles.passwordContainer}>
                     <TextInput 
@@ -53,7 +65,7 @@ export default function Register() {
                         onChangeText={setPassword}
                         value={password}
                         secureTextEntry = {!passwordVisible}
-                        placeholderTextColor={"rgba(255, 47, 116, 0.4)"}
+                        placeholderTextColor={"rgba(83, 88, 218, 0.4)"}
                     />
                     <Pressable style = {styles.eyeIconContainer} onPress={() => {setPasswordVisibility(!passwordVisible)}}>
                         { !passwordVisible && <FontAwesomeIcon icon={faEyeSlash} style = {styles.eyeIcon} size={18}/>}
@@ -89,7 +101,7 @@ export default function Register() {
                 </View>
                 <View style = {styles.registerOptionalContainer}>
                    <Text style = {styles.registerOptionalContainerText}>Already have an account? </Text> 
-                    <Pressable>
+                    <Pressable onPress={() => navigation.navigate("Login")}>
                         <Text style = {styles.registerOptional}>Log in</Text>
                     </Pressable>
                     
@@ -121,11 +133,10 @@ const styles = StyleSheet.create({
         marginBottom: 30
     },
     registerLogo: {
-        fontFamily: 'Poppins_700Bold',
+        fontFamily: 'Signika_700Bold',
         fontSize: 40,
         alignSelf: "center",
-        color: "#ff2f74",
-        marginBottom: 0.07*height
+        color: "#5358DA",
     },
     registerPage: {
         flex: 1,
@@ -141,13 +152,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         fontSize: 14,
         fontFamily: 'Poppins_500Medium',
-        backgroundColor: "rgba(255, 47, 116, 0.1)",
-        borderColor: "#FD4180",
-        color: "#FF2F74",
+        backgroundColor: "rgba(83, 88, 218, 0.1)",
+        borderColor: "#5358DA",
+        color: "#5358DA",
         marginHorizontal: 0
     }, 
     eyeIcon: {
-        color: "#FF2F74",
+        color: "#5358DA",
     },
     eyeIconContainer: {
         position: "absolute",
@@ -161,7 +172,7 @@ const styles = StyleSheet.create({
     registerButton: {
         height: 0.07* height,
         width: 0.8*width,
-        backgroundColor: "#FF2F74",
+        backgroundColor: "#5358DA",
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 10,
@@ -196,7 +207,7 @@ const styles = StyleSheet.create({
     registerOptional: {
         fontFamily: 'Poppins_500Medium',
         fontSize: 13, 
-        color: "#FF2F74"
+        color: "#5358DA"
     },
     modalContainer: {
         flex: 1,
@@ -221,5 +232,14 @@ const styles = StyleSheet.create({
       modalLoading: {
         flex: 4,
         alignItems: "center",
-      }
+      },
+      logoContainer: {
+        flexDirection: "row",
+        justifyContent: "center",
+        marginBottom: 0.08*height
+      },
+      logoImg: {
+        height: 0.15*width,
+        width: 0.15*width
+      },
 })

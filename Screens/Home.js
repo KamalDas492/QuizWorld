@@ -1,13 +1,18 @@
 import { Image, ScrollView, StyleSheet, Text, View, Dimensions, FlatList, Pressable } from "react-native";
 import TopicCard from "../Components/TopicCard";
 const { width, height } = Dimensions.get("window");
-
-
+import {AuthContext} from "../services/context"
+import { useContext } from "react";
 
 
 
 export default function Home({navigation}) {
-
+    const {user}= useContext(AuthContext);
+    var username = "Guest";
+    if(user) {
+        username = (user.email).split('@')[0];
+    }
+    
     const topicsList = [
         {key: 0, name: "History", src: require("../assets/Icons/castle.png"), fill: "rgba(255, 252, 166, 0.42)", stroke: "#FFC700"},
         {key: 1, name: "Geography", src: require("../assets/Icons/globe.png"), fill: "rgba(203, 217, 253, 0.4)", stroke: "#3F6CDF"},
@@ -39,7 +44,7 @@ export default function Home({navigation}) {
                         style = {styles.userimg}
                     />
                     <View>
-                        <Text style = {styles.username}> Hello Kamal,</Text>
+                        <Text style = {styles.username}> Hello {username},</Text>
                         <Text style = {{fontFamily: 'Poppins_500Medium'}}> Welcome to QuizWorld</Text>
                     </View>
                 </View>

@@ -1,20 +1,37 @@
-import { Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Dimensions, Image, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
+import { useNavigation } from "@react-navigation/native";
+import { login } from "../services/auth";
+import {AuthContext, AuthProvider} from "../services/context"
 const { width, height } = Dimensions.get("window");
 const aspectRatio = 500/725;
 
 export default function Login() {
-    const [username, setUsername] = useState("")
+    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [passwordVisible, setPasswordVisibility] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const navigation = useNavigation();
 
-    const handleFormSubmit = () => {
-        console.log(username, password);
-        setUsername("");
-        setPassword("")
+    //const {userCtx, setUserCtx} = useContext(AuthContext);
+
+    const handleFormSubmit = async () => {
+        try {
+            setLoading(true);
+            const user = await login(email, password);
+            //setUserCtx(user);
+            setEmail("");
+            setPassword("");
+            console.log(user);
+            navigation.navigate("HomeStack");
+        } catch(err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
     }
 
     
@@ -24,13 +41,20 @@ export default function Login() {
                 source={require("../assets/Icons/login-vector.jpg")}
                 style = {styles.loginVector}
             />
-            <Text style = {styles.loginLogo}>QuizWorld</Text>
+            <View style = {styles.logoContainer}>
+                <Image 
+                    source = {require("../assets/Icons/logo_pink.png")}
+                    style = {styles.logoImg}
+                />
+                <Text style = {styles.loginLogo}>QuizWorld</Text>
+            </View>
+            
             <View>
                 <TextInput 
                     style = {styles.loginInputs}
                     placeholder="Username"
-                    onChangeText={setUsername}
-                    value={username}
+                    onChangeText={setEmail}
+                    value={email}
                     placeholderTextColor={"rgba(255, 47, 116, 0.4)"}
                 />
                 <View style = {styles.passwordContainer}>
@@ -76,12 +100,27 @@ export default function Login() {
                 </View>
                 <View style = {styles.loginOptionalContainer}>
                    <Text style = {styles.loginOptionalContainerText}>Don't have an account? </Text> 
-                    <Pressable>
+                    <Pressable onPress={() => navigation.navigate("Register")}>
                         <Text style = {styles.loginOptional}>Register</Text>
                     </Pressable>
                     
                 </View>
             </View>
+            {loading && (
+        <Modal
+          visible={true}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => {}} 
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <ActivityIndicator size="large" color="#FF2F74" style={styles.modalLoading} />
+              <Text style={styles.modalText}>Please wait...</Text>
+            </View>
+          </View>
+        </Modal>
+      )}
         </View>
     )
 }
@@ -93,11 +132,11 @@ const styles = StyleSheet.create({
         marginBottom: 30
     },
     loginLogo: {
-        fontFamily: 'Poppins_700Bold',
+        fontFamily: 'Signika_700Bold',
         fontSize: 40,
         alignSelf: "center",
         color: "#ff2f74",
-        marginBottom: 0.07*height
+        
     },
     loginPage: {
         flex: 1,
@@ -169,5 +208,38 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins_500Medium',
         fontSize: 13, 
         color: "#FF2F74"
-    }
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      modalContent: {
+        flexDirection: "row",
+        backgroundColor: 'white',
+        paddingVertical: 30,
+        borderRadius: 5,
+        alignItems: 'center',
+        width: 0.6*width,
+        
+      },
+      modalText: {
+        fontSize: 16,
+        flex: 8,
+        alignItems: "center",
+      },
+      modalLoading: {
+        flex: 4,
+        alignItems: "center",
+      },
+      logoImg: {
+        height: 0.15*width,
+        width: 0.15*width
+      },
+      logoContainer: {
+        flexDirection: "row",
+        justifyContent: "center",
+        marginBottom: 0.08*height
+      }
 })

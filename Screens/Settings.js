@@ -3,21 +3,36 @@ import OptionCard from "../Components/OptionCard";
 const { width, height } = Dimensions.get("window");
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowRightFromBracket, faBell, faCircleQuestion, faEnvelope, faLanguage, faStar } from "@fortawesome/free-solid-svg-icons";
-
-
+import { logout } from "../services/auth";
+import { useContext } from "react";
+import { AuthContext } from "../services/context";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Settings() {
+    const navigation = useNavigation();
+    const {setUser} = useContext(AuthContext);
+    const handleLogout = async () => {
+        try {
+            await logout();
+            //setUser(null);
+            navigation.navigate("Login");
+            
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
     const optionList = [
         {key: 0, name:"Change language", icon: faLanguage},
         {key: 1, name:"Notification settings", icon: faBell},
         {key: 2, name:"Help", icon: faCircleQuestion},
         {key: 3, name:"Rate this app", icon: faStar},
         {key: 4, name:"Contact us", icon: faEnvelope},
-        {key: 5, name:"Log out", icon: faArrowRightFromBracket}
+        {key: 5, name:"Log out", icon: faArrowRightFromBracket, onClick: handleLogout}
     ]
     
     const Item = ({ item }) => (
-        <Pressable>
+        <Pressable onPress = {item.onClick}>
         <OptionCard key={item.key} name = {item.name} src={item.icon} /> 
         </Pressable>   
       );
