@@ -1,8 +1,16 @@
 import { Dimensions, Image, Pressable, StyleSheet, Text, View } from "react-native";
 const { width, height } = Dimensions.get("window");
 
+const determineFontSize = (text) => {
+  if (text.length < 26) {
+      return 28;
+    } else {
+      return 20;
+    }
+  };
+
 export default function QuizStart({route}) {
-    const {topic} = route.params;
+    const {subtopic} = route.params;
    // console.log(route);
     const handleStartQuiz = () => {
         //console.log("Quiz started");
@@ -13,7 +21,7 @@ export default function QuizStart({route}) {
                 source={require("../assets/Icons/quizStart.jpg")}
                 style = {styles.quizstartImage}
             />
-            <Text style = {styles.quizStartTopic}>{topic}</Text>
+            <View ><Text style = {[styles.quizStartTopic, {fontSize: determineFontSize(subtopic)}]}>{subtopic}</Text></View>
             <View style = {styles.quizStartDesc}>
                 <Text style = {styles.quizStartDescText}>No. of questions: 10</Text>
                 <Text style = {styles.quizStartDescText}>Time per question: 15 seconds</Text>
@@ -38,7 +46,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#ffffff"
     },
     quizStartTopic: {
-        fontSize: 0.04*height,
         fontFamily: 'Poppins_700Bold', 
         alignSelf: "center",
         color: "#FF2F74",
