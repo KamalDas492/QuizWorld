@@ -3,7 +3,7 @@ import TopicCard from "../Components/TopicCard";
 const { width, height } = Dimensions.get("window");
 import {AuthContext} from "../services/context"
 import { useContext } from "react";
-
+import topicsList from "../admin/Topics";
 
 
 export default function Home({navigation}) {
@@ -13,22 +13,9 @@ export default function Home({navigation}) {
         username = (user.email).split('@')[0];
     }
     
-    const topicsList = [
-        {key: 0, name: "History", src: require("../assets/Icons/castle.png"), fill: "rgba(255, 252, 166, 0.42)", stroke: "#FFC700"},
-        {key: 1, name: "Geography", src: require("../assets/Icons/globe.png"), fill: "rgba(203, 217, 253, 0.4)", stroke: "#3F6CDF"},
-        {key: 2, name: "Science", src: require("../assets/Icons/atom.png"), fill: "rgba(39, 39, 188, 0.15)", stroke: "#2727BC"},
-        {key: 3, name: "Math", src: require("../assets/Icons/function.png"), fill: "rgba(79, 200, 154, 0.24)", stroke: "#4FC89A"},
-        {key: 4, name: "General Knowledge", src: require("../assets/Icons/book.png"), fill: "rgba(254, 97, 8, 0.19)", stroke: "#EF990C"},
-        {key: 5, name: "Technology", src: require("../assets/Icons/artificial-intelligence.png"), fill: "rgba(113, 90, 161, 0.28)", stroke: "#5E2ACA"},
-        {key: 6, name: "Movies", src: require("../assets/Icons/clapperboard.png"), fill: "rgba(250, 45, 174, 0.11)", stroke: "#FA2DAE"},
-        {key: 7, name: "Books", src: require("../assets/Icons/literature.png"), fill: "rgba(0, 233, 226, 0.1)", stroke: "#05DBD4"},
-        {key: 8, name: "Sports", src: require("../assets/Icons/football.png"), fill: "rgba(113, 90, 161, 0.28)", stroke: "#5E2ACA"},
-        {key: 9, name: "Food", src: require("../assets/Icons/restaurant.png"), fill: "rgba(254, 31, 30, 0.22)", stroke: "#FA1F1E"},
-        
-    ]
 
     const Item = ({ item }) => (
-        <Pressable onPress={() => navigation.navigate("QuizStart", {topic: item.name})}>
+        <Pressable onPress={() => {navigation.navigate("SubTopics", {topic:item.name,subtopicList: item.subtopics, color: item.stroke, fillColor: item.fill})}}>
         <TopicCard key={item.key} name = {item.name} src={item.src} fill = {item.fill} stroke = {item.stroke} /> 
         </Pressable>   
       );
