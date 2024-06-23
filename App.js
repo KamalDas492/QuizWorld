@@ -12,6 +12,8 @@ import Welcome from './Screens/Welcome';
 import {AuthContext, AuthProvider} from "./services/context"
 import { useContext } from 'react';
 import SubTopics from './Screens/SubTopics';
+import Quiz from './Screens/Quiz';
+import Result from './Screens/Result';
 
 const HomeStack = createNativeStackNavigator();
 
@@ -27,6 +29,8 @@ const AppContent = () => {
             <HomeStack.Screen name="HomeStack" component={HomeStackScreen} options={{ headerShown: false }} />
             <HomeStack.Screen name="SubTopics" component={SubTopics} options={{ headerShown: false }} />
             <HomeStack.Screen name="QuizStart" component={QuizStart} options={{ headerShown: false }} />
+            <HomeStack.Screen name="Quiz" component={Quiz} options={{ headerShown: false }} />
+            <HomeStack.Screen name="Result" component={Result} options={{ headerShown: false }} />
             </>
         ) : (
           <>

@@ -15,7 +15,7 @@ export default function Home({navigation}) {
     
 
     const Item = ({ item }) => (
-        <Pressable onPress={() => {navigation.navigate("SubTopics", {topic:item.name,subtopicList: item.subtopics, color: item.stroke, fillColor: item.fill})}}>
+        <Pressable onPress={() => {navigation.navigate("SubTopics", {topic:item.name,subtopicList: item.subtopics})}}>
         <TopicCard key={item.key} name = {item.name} src={item.src} fill = {item.fill} stroke = {item.stroke} /> 
         </Pressable>   
       );

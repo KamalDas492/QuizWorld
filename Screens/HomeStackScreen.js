@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import QuizStart from "./QuizStart";
 import Login from "./Login";
 import Settings from './Settings';
+import Timer from '../Components/Timer';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,7 +33,7 @@ export default function HomeStackScreen() {
       }
     })}>
       <Tab.Screen name = "Home" component={Home}/>
-      <Tab.Screen name = "Leaderboard" component={Login} />
+      <Tab.Screen name = "Leaderboard" component={Timer} />
       <Tab.Screen name = "Settings" component={Settings} />
   </Tab.Navigator>
     
