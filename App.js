@@ -14,6 +14,7 @@ import { useContext } from 'react';
 import SubTopics from './Screens/SubTopics';
 import Quiz from './Screens/Quiz';
 import Result from './Screens/Result';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeStack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ const AppContent = () => {
   const { user, _ } = useContext(AuthContext);
 
   return (
+    
     <NavigationContainer style = {styles.container}>
       <HomeStack.Navigator>
         {user ? (
@@ -41,6 +43,7 @@ const AppContent = () => {
       </HomeStack.Navigator>
       <StatusBar />
     </NavigationContainer>
+    
   );
 };
 

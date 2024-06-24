@@ -14,6 +14,7 @@ export default function Quiz({route, navigation}) {
     const [IsSelected, setIsSelected] = useState(false);
     const [pressedIndex, setPressedIndex] = useState(-1);
     const [timeLeft, setTimeLeft] = useState(duration);
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const [score, setScore] = useState(0);
     const numQuestions = 10;
     const animatedWidth = useRef(new Animated.Value(1)).current;
@@ -35,7 +36,7 @@ export default function Quiz({route, navigation}) {
     }, [quizTopic])
 
     useEffect(() => {
-        if(questions.length > 0) {
+        if(questions.length > 0 && quesIndex < questions.length) {
              const options = [questions[quesIndex]["Option A"], questions[quesIndex]["Option B"], questions[quesIndex]["Option C"], questions[quesIndex]["Option D"]];
             setOptions(options);
         }
@@ -43,32 +44,43 @@ export default function Quiz({route, navigation}) {
         setPressedIndex(-1);
         setTimeLeft(duration);
         animatedWidth.setValue(1);
+        //console.log(quesIndex);
     }, [questions, quesIndex])
 
     useEffect(() => {
-        if(timeLeft == 0) {
-            setQuesIndex(quesIndex + 1);
-            setTimeLeft(duration);
-            animatedWidth.setValue(1);
-            return;
+        let timer;
+
+        if (timeLeft > 0 && quesIndex < numQuestions) {
+            timer = setInterval(() => {
+                setTimeLeft((prevTime) => prevTime - 1);
+            }, 1000);
+
+            Animated.timing(animatedWidth, {
+                toValue: 0,
+                duration: timeLeft * 1000,
+                easing: Easing.linear,
+                useNativeDriver: false,
+            }).start();
+        } else if (timeLeft === 0) {
+            
+            if(quesIndex < numQuestions - 1) {
+                //console.log("next Button");
+                handleNextButtonClicked(); 
+                
+            } else {
+                if(!isSubmitted) {
+                    //console.log("submit button");
+                    handleSubmit();
+                }
+                
+            }
         }
-        const timer = setInterval(() => {
-            setTimeLeft(timeLeft - 1);
-            //console.log(timeLeft);
-        }, 1000)
-
-        Animated.timing(animatedWidth, {
-            toValue: 0, 
-            duration: timeLeft * 1000,
-            easing: Easing.linear,
-            useNativeDriver: false,
-        }).start();
-
+        //console.log("timeLeft:", timeLeft);
         return () => {
             clearInterval(timer);
             animatedWidth.stopAnimation();
-        }
-    }, [timeLeft, animatedWidth])
+        };
+    }, [timeLeft, quesIndex]);
 
     const handleSelectAnswer = (option, index) => {
         if(!IsSelected) {
@@ -82,8 +94,15 @@ export default function Quiz({route, navigation}) {
 
     const handleNextButtonClicked = () => {
         setQuesIndex(quesIndex + 1);
-
+        setTimeLeft(duration);
+        animatedWidth.setValue(1);
     }
+    const handleSubmit = () => {
+        //setQuesIndex(quesIndex + 1);
+        setIsSubmitted(true);
+        navigation.navigate("Result", {score: score})
+    }
+
     if(isLoading) {
         return (
             <View>
@@ -130,7 +149,7 @@ export default function Quiz({route, navigation}) {
                     <Text style = {styles.submitBtn}>Next Question</Text>
                 </Pressable>
              ) : (
-                <Pressable onPress={() => {navigation.navigate("Result", {score: score})}}>
+                <Pressable onPress={handleSubmit}>
                     <Text style = {styles.submitBtn}>Submit</Text>
                 </Pressable>
             )}
