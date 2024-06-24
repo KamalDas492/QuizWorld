@@ -9,11 +9,12 @@ const determineFontSize = (text) => {
     }
   };
 
-export default function QuizStart({route}) {
+export default function QuizStart({route, navigation}) {
     const {subtopic} = route.params;
    // console.log(route);
     const handleStartQuiz = () => {
         //console.log("Quiz started");
+        navigation.navigate("Quiz", {quizTopic: subtopic});
     }
     return (
         <View style = {styles.quizStartPage}>
