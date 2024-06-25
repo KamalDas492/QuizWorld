@@ -19,9 +19,9 @@ export default function Welcome() {
 const styles = StyleSheet.create({
     welcomePage: {
       backgroundColor: "#FF2F74",
-      minHeight: height,
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
+      flex: 1
     },
     logoDesc: {
       flexDirection: 'row',

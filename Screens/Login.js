@@ -25,8 +25,8 @@ export default function Login() {
             //setUserCtx(user);
             setEmail("");
             setPassword("");
-            console.log(user);
-            navigation.navigate("HomeStack");
+            //console.log(user);
+            navigation.navigate("HomeStackScreen");
         } catch(err) {
             console.log(err);
         } finally {

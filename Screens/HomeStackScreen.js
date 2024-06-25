@@ -3,6 +3,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import Home from "./Home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Settings from './Settings';
+import Leaderboard from './Leaderboard';
+
 
 
 
@@ -33,7 +35,7 @@ export default function HomeStackScreen() {
       }
     })}>
       <Tab.Screen name = "Home" component={Home}/>
-      <Tab.Screen name = "Leaderboard" component={Settings} />
+      <Tab.Screen name = "Leaderboard" component={Leaderboard} />
       <Tab.Screen name = "Settings" component={Settings} />
   </Tab.Navigator>
     

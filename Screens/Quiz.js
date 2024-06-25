@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Animated, Easing, Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import fetchQuestions from "./../services/fetchQuestions"
+import LoadIndicator from "../Components/loadIndicator";
 const { width, height } = Dimensions.get("window");
 
 
@@ -25,7 +26,7 @@ export default function Quiz({route, navigation}) {
                 const questions = await fetchQuestions(quizTopic, numQuestions);
                 setQuestions(questions);
                 setIsLoading(false);
-                Animated.setValue(1);
+                animatedWidth.setValue(1);
                 //console.log(questions);
             } catch(err) {
                 console.log(err);
@@ -105,9 +106,7 @@ export default function Quiz({route, navigation}) {
 
     if(isLoading) {
         return (
-            <View>
-                <Text>Is Loading</Text>
-            </View>
+            <LoadIndicator />
         )
     } else {
     return (

@@ -26,8 +26,8 @@ export default function Register() {
             //setUserCtx(userCtx);
             setEmail("");
             setPassword("");
-            console.log(user);
-            navigation.navigate("HomeStack");
+            //console.log(user);
+            navigation.navigate("HomeStackScreen");
         } catch(err) {
             console.log(err);
         } finally {
