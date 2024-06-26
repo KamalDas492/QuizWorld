@@ -1,5 +1,6 @@
-import {auth} from "./config"
+import {auth, db} from "./config"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import {Alert} from "react-native";
 
 
@@ -7,7 +8,15 @@ const signup = async (email, password) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        console.log("User signed up:", user.uid);
+       // console.log("User signed up:", user.uid);
+        const userInfo = {
+          username: email.split('@')[0],
+          country: "",
+          photo: "",
+          score: 0,
+          coins: 0
+        };
+        await setDoc(doc(db, "users", user.uid), userInfo);
         return user; 
       } catch (error) {
         const errorCode = error.code;

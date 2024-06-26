@@ -14,9 +14,9 @@ import { useContext } from 'react';
 import SubTopics from './Screens/SubTopics';
 import Quiz from './Screens/Quiz';
 import Result from './Screens/Result';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-const HomeStack = createNativeStackNavigator();
+
+const Stack = createNativeStackNavigator();
 
 
 const AppContent = () => {
@@ -25,22 +25,22 @@ const AppContent = () => {
   return (
     
     <NavigationContainer style = {styles.container}>
-      <HomeStack.Navigator>
+      <Stack.Navigator>
         {user ? (
           <>
-            <HomeStack.Screen name="HomeStack" component={HomeStackScreen} options={{ headerShown: false }} />
-            <HomeStack.Screen name="SubTopics" component={SubTopics} options={{ headerShown: false }} />
-            <HomeStack.Screen name="QuizStart" component={QuizStart} options={{ headerShown: false }} />
-            <HomeStack.Screen name="Quiz" component={Quiz} options={{ headerShown: false }} />
-            <HomeStack.Screen name="Result" component={Result} options={{ headerShown: false }} />
+            <Stack.Screen name="HomeStackScreen" component={HomeStackScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="SubTopics" component={SubTopics} options={{ headerShown: false }} />
+            <Stack.Screen name="QuizStart" component={QuizStart} options={{ headerShown: false }} />
+            <Stack.Screen name="Quiz" component={Quiz} options={{ headerShown: false }} />
+            <Stack.Screen name="Result" component={Result} options={{ headerShown: false }} />
             </>
         ) : (
           <>
-            <HomeStack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-            <HomeStack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+            <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
             </>
         )}
-      </HomeStack.Navigator>
+      </Stack.Navigator>
       <StatusBar />
     </NavigationContainer>
     

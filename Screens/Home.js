@@ -2,24 +2,44 @@ import { Image, ScrollView, StyleSheet, Text, View, Dimensions, FlatList, Pressa
 import TopicCard from "../Components/TopicCard";
 const { width, height } = Dimensions.get("window");
 import {AuthContext} from "../services/context"
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import topicsList from "../admin/Topics";
+import LoadIndicator from "../Components/loadIndicator";
+import { fetchUserDetails } from "../services/handleUserDetails";
 
 
 export default function Home({navigation}) {
     const {user}= useContext(AuthContext);
-    var username = "Guest";
-    if(user) {
-        username = (user.email).split('@')[0];
-    }
-    
+    const [isLoading, setIsLoading] = useState(true);
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const userDetails = await fetchUserDetails(user.uid);
+                setUserData(userDetails);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchData();
+        
+    }, [user])
+
+
 
     const Item = ({ item }) => (
         <Pressable onPress={() => {navigation.navigate("SubTopics", {topic:item.name,subtopicList: item.subtopics})}}>
         <TopicCard key={item.key} name = {item.name} src={item.src} fill = {item.fill} stroke = {item.stroke} /> 
         </Pressable>   
       );
-
+    if(isLoading) {
+        return (
+            <LoadIndicator />
+        )
+    } else {
     return (
         <View>
         
@@ -31,18 +51,15 @@ export default function Home({navigation}) {
                         style = {styles.userimg}
                     />
                     <View>
-                        <Text style = {styles.username}> Hello {username},</Text>
+                        <Text style = {styles.username}> Hello {userData.username},</Text>
                         <Text style = {{fontFamily: 'Poppins_500Medium'}}> Welcome to QuizWorld</Text>
                     </View>
                 </View>
                 <View style = {styles.coins}>
-                    
-                        <Image
+                        <Text style = {styles.coinAmount}><Image
                             source = {require("../assets/Icons/dollar.png")}
                             style = {styles.coinIcon}
-                        />
-                        <Text style = {styles.coinAmount}>200</Text>
-                    
+                        /> {userData.coins}</Text>
                 </View>
             </View>
             <View style = {styles.topics}>
@@ -64,6 +81,7 @@ export default function Home({navigation}) {
             
         </View>
     )
+}
 }
 
 const styles = StyleSheet.create({
