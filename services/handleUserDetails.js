@@ -7,7 +7,7 @@ const fetchUserDetails = async (userId) => {
       const docRef = doc(db, "users", userId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        const userData = docSnap.data();
+        const userData = {...docSnap.data(), ...{userId: userId}};
         //console.log("User Data:", userData);
         return userData;
       } else {
